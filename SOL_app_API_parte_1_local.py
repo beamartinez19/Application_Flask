@@ -7,7 +7,7 @@ import sklearn
 import pickle
 import numpy as np
 
-app = Flask(name)
+app = Flask(__name__)
 app.config['DEBUG'] = True
 
 root = '/home/Beatriz19/Application_Flask/modelo_clase/'
