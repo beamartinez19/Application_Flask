@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 
 root = '/home/Beatriz19/Application_Flask/modelo_clase/'
-root_db = '/home/Beatriz19/Application_Flasek/databases/'
+root_db = '/home/Beatriz19/Application_Flask/databases/'
 model = pickle.load(open(root + 'advertising.model', 'rb'))
 print(model.coef_)
 
