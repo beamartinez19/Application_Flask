@@ -29,7 +29,7 @@ def get_predict():
     crs = conn.cursor()
 
     # Get POST JSON data
-    data = request.get_json()
+    data = request.get_json(silent=True)
     if data == None:
         data = request.args
     tv = data.get("TV",0)
@@ -44,7 +44,7 @@ def get_predict():
                     VALUES(?,?,?,?,?) ''', (str_time, tv, radio, newspaper, pred))
     conn.commit()
     conn.close()
-    return str(pred), 200
+    return "con valores %.1f %.1f %.1f: %.3f" %(tv, radio, newspaper, str(pred)), 200
 
 @app.route('/review_predicts', methods=['GET'])
 def return_predict():
