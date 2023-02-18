@@ -1,5 +1,3 @@
-
-
 from flask import Flask, request, jsonify
 from datetime import datetime
 import sqlite3
@@ -11,20 +9,23 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 
 root = '/home/Beatriz19/Application_Flask/modelo_clase/'
-root_db = '/home/Beatriz19/Application_Flask/databases/'
-
+root_db = '/home/Beatriz19/Application_Flasek/databases/'
 model = pickle.load(open(root + 'advertising.model', 'rb'))
-print(model.coef)
+print(model.coef_)
+
+@app.route('/predict', methods=['GET'])
+def bienvenido():
+    return 'Hola soy tu predictor de ventas (bienvenido)'
 
 # POST {"TV":, "radio":, "newspaper":} -> It returns the sales prediction for input investments
-@app.route('/predict', methods=['GET'])
+@app.route('/predict', methods=['POST'])
 def get_predict():
 
     # Get current time for the PREDICTIONS table
     str_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
     # Establish SQLITE3 connection
-    conn = sqlite3.connect(root_db+"advertising.db")
+    conn = sqlite3.connect("advertising.db")
     crs = conn.cursor()
 
     # Get POST JSON data
@@ -45,7 +46,6 @@ def get_predict():
     conn.close()
     return 'con valores %s %s %s: %s' %(str(tv), str(radio), str(newspaper), str(pred)), 200
 
-
 @app.route('/review_predicts', methods=['GET'])
 def return_predict():
 
@@ -53,14 +53,8 @@ def return_predict():
     conn = sqlite3.connect(root_db + "advertising.db")
     crs = conn.cursor()
     query = "SELECT * FROM PREDICTIONS"
-    resultado=jsonify(crs.execute(query).fetchall())
-    conn.close()
 
-    return resultado, 200
+    return jsonify(crs.execute(query).fetchall())
 
-@app.route('/', methods=['GET'])
-def mensaje_inicial():
-    return 'Hola, soy tu predictor de ventas. (mensaje de prueba2)'
+#app.run(port=4000)
 
-
-# app.run(port=4000)
